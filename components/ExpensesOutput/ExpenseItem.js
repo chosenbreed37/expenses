@@ -1,0 +1,66 @@
+import { Pressable, View, StyleSheet, Text } from 'react-native';
+import { GlobalStyles } from '../../constants/styles';
+import { getFormattedDate } from '../../utils/date';
+import { useNavigation } from '@react-navigation/native';
+
+function ExpenseItem({ id, amount, description, date }) {
+    const navigation = useNavigation();
+
+    const pressedHandler = () => {
+        navigation.navigate('ManageExpense', { expenseId: id});
+    }
+
+    return (<Pressable onPress={pressedHandler} style={({ pressed }) => pressed ? styles.pressed : null}>
+        <View style={styles.container}>
+            <View>
+                <Text style={[styles.textBase, styles.description]}>{description}</Text>
+                <Text style={styles.textBase}>{getFormattedDate(date)}</Text>
+            </View>
+            <View style={styles.amountContainer}>
+                <Text style={styles.amount}>${amount.toFixed(2)}</Text>
+            </View>
+        </View>
+    </Pressable>);
+}
+
+const styles = StyleSheet.create({
+    pressed: {
+        opacity: 0.75
+    },
+    container: {
+        flexDirection: 'row',
+        backgroundColor: GlobalStyles.colors.primary500,
+        justifyContent: 'space-between',
+        padding: 12,
+        marginVertical: 8,
+        borderRadius: 6,
+        elevation: 3,
+        shadowColor: GlobalStyles.colors.gray500,
+        shadowRadius: 4,
+        shadowOffset: { width: 1, height: 1 },
+        shadowOpacity: 0.4
+    },
+    textBase: {
+        color: GlobalStyles.colors.primary50
+    },
+    description: {
+        marginBottom: 4,
+        fontSize: 16,
+        fontWeight: 'bold'
+    },
+    amountContainer: {
+        paddingHorizontal: 12,
+        paddingVertical: 4,
+        backgroundColor: 'white',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 4,
+        minWidth: 80
+    },
+    amount: {
+        fontWeight: 'bold',
+        color: GlobalStyles.colors.primary500
+    }
+});
+
+export default ExpenseItem;
